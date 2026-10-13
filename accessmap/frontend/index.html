@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12352b">
+  <meta name="description" content="Explore wheelchair-accessibility information for places near you.">
+  <title>AccessMap — Accessibility, made clearer</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="AccessMap home">
+      <span class="brand-mark">A</span><span>Access<span class="brand-light">Map</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a class="nav-link active" href="#explore">Explore</a>
+      <a class="nav-link" href="#how-it-works">How it works</a>
+    </nav>
+    <button class="button button-dark" id="reportTopButton">＋ Add a report</button>
+  </header>
+
+  <main>
+    <section class="hero" id="explore">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="live-dot"></span> ACCESSIBILITY STARTS WITH INFORMATION</p>
+        <h1>Find places that<br><em>work for you.</em></h1>
+        <p class="hero-description">Explore community-reported wheelchair access details, spot what’s known, and ask questions before you go.</p>
+        <form id="searchForm" class="search-box">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="Search a place, area, or feature…" aria-label="Search places">
+          <button class="button button-green" type="submit">Search <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="hero-meta"><span>◎ Community-powered</span><span>↗ Evidence-aware</span><span>♡ Built for everyone</span></div>
+      </div>
+      <div class="hero-art" aria-label="Illustration of a wheelchair-accessible location">
+        <div class="art-card art-card-top"><span class="art-icon">↗</span><span><strong>Access info</strong><small>Clearer before you go</small></span></div>
+        <div class="art-sun"></div>
+        <div class="art-building"><div class="building-roof"></div><div class="building-front"><div class="window"></div><div class="window"></div><div class="door"></div></div><div class="ramp"></div></div>
+        <div class="art-plant plant-one">♧</div><div class="art-plant plant-two">♧</div>
+        <div class="art-card art-card-bottom"><span class="check-mark">✓</span><span><strong>Know what’s reported</strong><small>Unknown is not the same as no</small></span></div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">YOUR NEXT STOP</p><h2>Explore accessible places</h2><p class="muted">Reports can change. Check details and contact a venue if you need certainty.</p></div>
+        <span id="placeCount" class="count-pill">Loading places…</span>
+      </div>
+
+      <div class="filter-row" aria-label="Filter places">
+        <button class="filter-chip selected" data-filter="all">All places</button>
+        <button class="filter-chip" data-filter="RAMP">Ramp</button>
+        <button class="filter-chip" data-filter="STEP_FREE">Step-free entry</button>
+        <button class="filter-chip" data-filter="ACCESSIBLE_TOILET">Accessible toilet</button>
+        <button class="filter-chip" data-filter="PARKING">Accessible parking</button>
+      </div>
+
+      <div class="explore-grid">
+        <div class="place-list" id="placeList" aria-live="polite">
+          <div class="loading-card">Loading places from AccessMap…</div>
+        </div>
+        <section class="map-panel" aria-label="Map of places">
+          <div class="map-header"><div><strong>Places on the map</strong><p>Illustrative sample locations</p></div><span class="map-legend"><i></i> Place</span></div>
+          <div id="map" role="application" aria-label="Interactive map"></div>
+          <p class="map-note">Map tiles require an internet connection. Sample points are illustrative, not verified venue locations.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="assistant-section" id="how-it-works">
+      <div class="assistant-copy">
+        <p class="eyebrow">MEET YOUR ACCESS GUIDE</p>
+        <h2>Questions welcome.<br><em>Guesswork, less so.</em></h2>
+        <p>Ask about ramps, steps, entrances, toilets, or what information is still missing. AccessMap will answer from available report data and clearly flag unknowns.</p>
+        <div class="assistant-points"><p>✓ Answers based on reported details</p><p>✓ Missing information called out</p><p>✓ Voice input supported where available</p></div>
+      </div>
+      <div class="chat-card">
+        <div class="chat-head"><div class="assistant-avatar">A</div><div><strong>AccessMap assistant</strong><small><span class="live-dot"></span> Evidence-aware demo</small></div></div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble assistant-bubble">Hi! I can help you understand the accessibility details we have. Try asking, “Which places have a reported ramp?”</div>
+        </div>
+        <form id="askForm" class="chat-form">
+          <input id="questionInput" type="text" placeholder="Ask about accessibility…" aria-label="Ask the AccessMap assistant" required>
+          <button type="button" id="voiceButton" class="icon-button" title="Use voice input" aria-label="Use voice input">🎙</button>
+          <button type="submit" class="send-button" aria-label="Send question">↑</button>
+        </form>
+        <p class="chat-disclaimer">Demo assistant, not a guarantee of access. Confirm critical needs with the venue.</p>
+      </div>
+    </section>
+
+    <section class="report-section" id="report">
+      <div><p class="eyebrow">HELP SOMEONE ELSE PLAN</p><h2>One small report.<br><em>A better-informed visit.</em></h2><p class="muted">Share what you observed. If you are unsure, choose “Unknown” rather than guessing.</p></div>
+      <form id="reportForm" class="report-form">
+        <label>Place<select id="reportPlace" required><option value="">Choose a place…</option></select></label>
+        <label>Feature<select id="reportFeature" required>
+          <option value="RAMP">Ramp</option><option value="STEP_FREE">Step-free entry</option>
+          <option value="ACCESSIBLE_TOILET">Accessible toilet</option><option value="PARKING">Accessible parking</option>
+          <option value="DOOR_WIDTH">Door width information</option>
+        </select></label>
+        <label>What did you observe?<select id="reportStatus" required>
+          <option value="YES">Yes — observed</option><option value="NO">No — observed absent</option>
+          <option value="LIMITED">Limited / partial</option><option value="UNKNOWN">Not sure / unknown</option>
+        </select></label>
+        <label>Notes (optional)<textarea id="reportNotes" rows="3" maxlength="500" placeholder="Add useful context, without personal information…"></textarea></label>
+        <button class="button button-green full-width" type="submit">Submit community report <span>→</span></button>
+        <p id="reportMessage" class="form-message" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="#"><span class="brand-mark">A</span><span>Access<span class="brand-light">Map</span></span></a><p>Built to make accessibility information easier to find. Community reports are not official certification.</p><span>ACCESS FOR ALL · 2026</span></footer>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/api.js"></script><script src="js/map.js"></script><script src="js/voice.js"></script><script src="js/assistant.js"></script><script src="js/reports.js"></script><script src="js/app.js"></script>
+</body>
+</html>
