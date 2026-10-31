@@ -1,4 +1,4 @@
-# AccessMap — AI-powered accessibility map (MVP)
+# AccessMap — Accessibility Places Finder (Prototype)
 
 AccessMap helps people explore places and understand reported wheelchair-accessibility details. This repository is a runnable starter prototype built with:
 - Frontend: HTML, CSS, vanilla JavaScript, Leaflet/OpenStreetMap
